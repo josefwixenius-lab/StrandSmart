@@ -5,256 +5,641 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a5c7a" />
   <title>StrandSmart – Lomma Beach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#eef7fb;
-      --surface:#ffffff;
-      --surface-2:#f7fbfd;
-      --text:#12303b;
-      --muted:#5b7480;
-      --line:#d7e8ef;
-      --primary:#0a5c7a;
-      --primary-2:#1382a7;
-      --accent:#f4c542;
-      --sand:#efd9a7;
-      --sea:#8fd3e8;
-      --sea-deep:#4cb7d3;
-      --ok:#177a4d;
-      --warn:#a56100;
-      --danger:#a52727;
-      --shadow:0 16px 40px rgba(12,63,82,.12);
-      --radius:22px;
-      --radius-sm:16px;
-      --max:1180px;
+    /* ─── Design Tokens ─────────────────────────────────────────── */
+    :root {
+      /* Colors */
+      --bg:          #eef7fb;
+      --surface:     #ffffff;
+      --surface-2:   #f7fbfd;
+      --text:        #12303b;
+      --muted:       #4e6b77; /* lifted from 5b7480 → passes 4.5:1 on white */
+      --line:        #d7e8ef;
+      --primary:     #0a5c7a;
+      --primary-2:   #1382a7;
+      --accent:      #f4c542;
+      --sand:        #efd9a7;
+      --sea:         #8fd3e8;
+      --sea-deep:    #4cb7d3;
+
+      /* Status – base handled by .status modifier classes */
+      --ok-bg:       #edf9f2;
+      --ok-text:     #145f3b;
+      --warn-bg:     #fff6e8;
+      --warn-text:   #8a4f00;
+      --danger-bg:   #fceceb;
+      --danger-text: #8c1f1f;
+
+      /* Spacing – strict 8px grid */
+      --s1: 8px;
+      --s2: 16px;
+      --s3: 24px;
+      --s4: 32px;
+      --s5: 40px;
+      --s6: 48px;
+
+      /* Radii */
+      --r-sm:  12px;
+      --r-md:  16px;
+      --r-lg:  22px;
+      --r-xl:  28px;
+      --r-pill: 999px;
+
+      /* Shadows */
+      --shadow-sm: 0 4px 12px rgba(12,63,82,.08);
+      --shadow-md: 0 16px 40px rgba(12,63,82,.12);
+      --shadow-lg: 0 26px 64px rgba(0,0,0,.18);
+
+      /* Typography */
+      --font-body:    'DM Sans', ui-sans-serif, system-ui, sans-serif;
+      --font-display: 'DM Serif Display', Georgia, serif;
+
+      --max: 1180px;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#dff4fb 0%,#eef7fb 16%,#f8fbfc 100%);color:var(--text)}
-    body{min-height:100vh}
-    a{color:inherit}
-    .shell{max-width:var(--max);margin:0 auto;padding:18px 16px 110px}
-    .topbar{position:sticky;top:0;z-index:30;background:rgba(238,247,251,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(215,232,239,.8)}
-    .topbar-inner{max-width:var(--max);margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(180deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:white;font-weight:800;box-shadow:0 10px 24px rgba(10,92,122,.22)}
-    .brand-text strong{display:block;font-size:1rem;letter-spacing:.01em}
-    .brand-text span{display:block;font-size:.8rem;color:var(--muted)}
-    .pill{border:1px solid var(--line);background:rgba(255,255,255,.72);padding:10px 14px;border-radius:999px;font-size:.86rem;color:var(--muted)}
-    .hero{padding:22px 0 10px;display:grid;grid-template-columns:1.25fr .95fr;gap:18px}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .hero-main{overflow:hidden;position:relative;background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.95)),radial-gradient(circle at top right,#c7eef8 0, transparent 30%)}
-    .hero-main:before{content:"";position:absolute;right:-60px;top:-80px;width:230px;height:230px;background:radial-gradient(circle,#b7ebf7 0, rgba(183,235,247,0) 70%)}
-    .hero-grid{position:relative;padding:24px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:end}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#eff8fb;border:1px solid #d8eef5;color:var(--primary);padding:8px 12px;border-radius:999px;font-weight:700;font-size:.82rem}
-    h1{font-size:clamp(2rem,4vw,4rem);line-height:.96;letter-spacing:-.04em;margin:14px 0 12px;max-width:10ch}
-    .lead{font-size:1.02rem;line-height:1.6;color:var(--muted);max-width:60ch;margin:0 0 18px}
-    .cta-row{display:flex;gap:12px;flex-wrap:wrap}
-    button,.btn{border:none;border-radius:16px;padding:14px 18px;font-weight:700;cursor:pointer;transition:.2s transform,.2s box-shadow,.2s opacity;font-size:.95rem;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-    button:hover,.btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:linear-gradient(180deg,var(--primary-2),var(--primary));color:white;box-shadow:0 10px 26px rgba(10,92,122,.22)}
-    .btn-secondary{background:#fff;color:var(--text);border:1px solid var(--line)}
-    .quick-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .mini{padding:16px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid #e1eef3}
-    .mini b{display:block;font-size:1.35rem;letter-spacing:-.03em}
-    .mini span{display:block;font-size:.82rem;color:var(--muted);margin-top:4px}
-    .hero-side{padding:18px;background:linear-gradient(180deg,#ffffff 0,#fbfeff 100%)}
-    .hero-side h3,.section-head h2{margin:0 0 8px;font-size:1.12rem;letter-spacing:-.02em}
-    .muted{color:var(--muted)}
-    .widget-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:18px 0}
-    .widget{padding:18px}
-    .widget-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-    .big{font-size:1.8rem;font-weight:800;letter-spacing:-.05em}
-    .meter{height:10px;background:#edf5f8;border-radius:999px;overflow:hidden;border:1px solid #e0edf2}
-    .meter > span{display:block;height:100%;background:linear-gradient(90deg,var(--sea-deep),var(--primary-2));border-radius:999px}
-    .status-ok,.status-warn,.status-danger{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;font-size:.8rem;font-weight:700}
-    .status-ok{background:#edf9f2;color:var(--ok)}
-    .status-warn{background:#fff6e8;color:var(--warn)}
-    .status-danger{background:#fceceb;color:var(--danger)}
-    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-    .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:8px 0 10px}
-    .map-card{overflow:hidden}
-    .map-top{padding:18px 18px 8px;display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
-    .filters{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:white;cursor:pointer;font-weight:700;font-size:.84rem}
-    .chip.active{background:#eaf7fb;border-color:#cdeaf3;color:var(--primary)}
-    .beach-map-wrap{padding:10px 18px 18px}
-    .beach-map{position:relative;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:linear-gradient(180deg,var(--sea) 0 31%,var(--sea-deep) 31% 34%,var(--sand) 34% 100%);min-height:560px}
-    .sea-line{position:absolute;left:0;right:0;top:31%;height:26px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 24px,rgba(255,255,255,0) 24px 44px)}
-    .zone-label{position:absolute;left:18px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.8);backdrop-filter:blur(6px);font-weight:800;font-size:.76rem;border:1px solid rgba(255,255,255,.6)}
-    .zone-water{top:36%}
-    .zone-family{top:56%}
-    .zone-shelter{top:76%}
-    .map-grid{position:absolute;left:22px;right:22px;top:38%;bottom:22px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:10px}
-    .plot{border-radius:14px;border:1px solid rgba(18,48,59,.08);background:rgba(255,255,255,.38);backdrop-filter:blur(2px);cursor:pointer;position:relative;display:flex;align-items:flex-end;justify-content:flex-start;padding:8px;min-height:0;transition:.18s transform,.18s box-shadow,.18s background}
-    .plot:hover{transform:translateY(-1px);box-shadow:0 10px 16px rgba(0,0,0,.08)}
-    .plot small{font-size:.67rem;font-weight:800;color:#2a5564;background:rgba(255,255,255,.8);padding:4px 6px;border-radius:8px}
-    .plot.free{background:rgba(255,255,255,.42)}
-    .plot.reserved{background:rgba(255,255,255,.14);opacity:.52}
-    .plot.selected{outline:3px solid var(--primary);background:rgba(255,255,255,.86)}
-    .plot.recommended{box-shadow:0 0 0 2px rgba(19,130,167,.18) inset;background:rgba(255,255,255,.65)}
-    .legend{display:flex;gap:10px;flex-wrap:wrap;padding:0 18px 18px}
-    .legend .item{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
-    .swatch{width:16px;height:16px;border-radius:6px;border:1px solid rgba(18,48,59,.12);background:#fff}
-    .swatch.r{background:rgba(255,255,255,.18)}
-    .swatch.s{outline:2px solid var(--primary);outline-offset:-2px}
-    .swatch.rec{background:rgba(255,255,255,.75);box-shadow:0 0 0 2px rgba(19,130,167,.18) inset}
-    .panel{padding:18px}
-    .stack{display:grid;gap:14px}
-    .field{display:grid;gap:8px}
-    .field label{font-weight:700;font-size:.9rem}
-    input,select{width:100%;padding:14px 14px;border:1px solid var(--line);border-radius:14px;background:white;font-size:.95rem;color:var(--text)}
-    .segmented{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .segmented button{padding:12px;border:1px solid var(--line);background:white;color:var(--text);border-radius:14px;font-weight:800}
-    .segmented button.active{background:#ebf8fb;border-color:#cae9f2;color:var(--primary)}
-    .options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .opt{padding:12px;border-radius:14px;border:1px solid var(--line);background:#fff;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
-    .opt input{width:auto;margin-top:4px}
-    .opt.active{background:#f1fbfe;border-color:#cdeaf3}
-    .booking-summary{padding:16px;border-radius:18px;background:#f7fbfd;border:1px solid var(--line)}
-    .summary-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:.92rem}
-    .summary-row span:last-child{font-weight:800;text-align:right}
-    .qr-card{padding:16px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f7fbfd);border:1px solid var(--line)}
-    .qr-wrap{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:center}
-    .qr-box{width:104px;height:104px;border-radius:16px;background:white;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
-    .coords{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.87rem;background:#0f1f26;color:#e9f8fd;padding:12px 14px;border-radius:14px;overflow:auto}
-    .notice{padding:14px 16px;border-radius:16px;background:#fff9ea;border:1px solid #f6e2a7;color:#785600;font-size:.9rem}
-    .bookings-list{display:grid;gap:12px}
-    .booking-item{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px 14px 12px}
-    .booking-item h4{margin:0 0 8px;font-size:1rem}
-    .booking-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:.86rem;color:var(--muted);margin-bottom:10px}
-    .booking-actions{display:flex;gap:8px;flex-wrap:wrap}
-    .small-btn{padding:10px 12px;border-radius:12px;font-size:.82rem}
-    .footer-note{margin-top:18px;color:var(--muted);font-size:.82rem;text-align:center}
-    .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border:1px solid rgba(215,232,239,.9);border-radius:24px;box-shadow:var(--shadow);padding:10px;display:flex;gap:8px}
-    .bottom-nav a{padding:12px 14px;border-radius:16px;text-decoration:none;font-weight:800;font-size:.86rem;color:var(--muted)}
-    .bottom-nav a.active{background:#ecf8fb;color:var(--primary)}
-    dialog{border:none;border-radius:24px;padding:0;box-shadow:0 26px 64px rgba(0,0,0,.22);width:min(92vw,560px)}
-    dialog::backdrop{background:rgba(10,16,21,.45);backdrop-filter:blur(3px)}
-    .modal{padding:22px}
-    .modal h3{margin:0 0 8px;font-size:1.3rem}
-    .toast{position:fixed;top:86px;left:50%;transform:translateX(-50%);z-index:50;background:#10252d;color:#eefcff;padding:12px 16px;border-radius:999px;box-shadow:0 16px 44px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:.25s opacity,.25s transform}
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(4px)}
-    .desktop-hide{display:none}
-    @media (max-width:980px){
-      .hero,.layout{grid-template-columns:1fr}
-      .hero-grid{grid-template-columns:1fr}
-      .widget-grid{grid-template-columns:1fr 1fr}
+
+    /* ─── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, #dff4fb 0%, #eef7fb 16%, #f8fbfc 100%);
+      color: var(--text);
+      min-height: 100vh;
     }
-    @media (max-width:720px){
-      .shell{padding-inline:12px}
-      .widget-grid,.options,.booking-meta,.qr-wrap{grid-template-columns:1fr}
-      .segmented{grid-template-columns:1fr}
-      .hero-grid,.panel,.widget,.hero-side,.map-top,.beach-map-wrap{padding:16px}
-      .beach-map{min-height:470px}
-      .map-grid{gap:8px;left:16px;right:16px;top:39%;bottom:16px}
-      .plot small{font-size:.62rem;padding:3px 5px}
-      .bottom-nav{width:calc(100% - 24px);justify-content:space-between}
-      .desktop-hide{display:inline-flex}
-      .topbar .pill{display:none}
+    a { color: inherit; }
+    h1, h2, h3, h4 { margin: 0; }
+
+    /* ─── Layout Utilities ───────────────────────────────────────── */
+    .shell { max-width: var(--max); margin: 0 auto; padding: var(--s2) var(--s2) 110px; }
+    .stack { display: grid; gap: var(--s2); }
+    .cluster { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+
+    /* ─── Card ───────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-md);
     }
+
+    /* ─── Topbar ─────────────────────────────────────────────────── */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      background: rgba(238,247,251,.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(215,232,239,.8);
+    }
+    .topbar-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: var(--s2);
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
+    }
+    .brand { display: flex; align-items: center; gap: var(--s2); }
+    .brand-mark {
+      width: 42px; height: 42px; border-radius: var(--r-md);
+      background: linear-gradient(180deg, var(--primary), var(--primary-2));
+      display: grid; place-items: center;
+      color: white; font-weight: 800;
+      box-shadow: 0 10px 24px rgba(10,92,122,.22);
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+    }
+    .brand-text strong { display: block; font-size: 1rem; letter-spacing: .01em; }
+    .brand-text span   { display: block; font-size: .8rem; color: var(--muted); }
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.72);
+      padding: var(--s1) var(--s2);
+      border-radius: var(--r-pill);
+      font-size: .86rem; color: var(--muted);
+    }
+
+    /* ─── Status badges (base + modifiers) ──────────────────────── */
+    .status {
+      display: inline-flex; align-items: center; gap: var(--s1);
+      padding: 7px 10px; border-radius: var(--r-pill);
+      font-size: .8rem; font-weight: 700;
+    }
+    /* color indicator dot for non-color users */
+    .status::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status--ok     { background: var(--ok-bg);     color: var(--ok-text);     }
+    .status--ok::before     { background: var(--ok-text);     }
+    .status--warn   { background: var(--warn-bg);   color: var(--warn-text);   }
+    .status--warn::before   { background: var(--warn-text);   }
+    .status--danger { background: var(--danger-bg); color: var(--danger-text); }
+    .status--danger::before { background: var(--danger-text); }
+
+    /* ─── Buttons (base + modifiers) ────────────────────────────── */
+    .btn {
+      border: none; border-radius: var(--r-md);
+      padding: var(--s2) var(--s2);
+      font-family: var(--font-body);
+      font-weight: 700; cursor: pointer;
+      font-size: .95rem;
+      text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--s1);
+      transition: transform .18s, box-shadow .18s, opacity .18s;
+    }
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn--primary {
+      background: linear-gradient(180deg, var(--primary-2), var(--primary));
+      color: white;
+      box-shadow: 0 10px 26px rgba(10,92,122,.22);
+    }
+    .btn--secondary {
+      background: #fff; color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn--sm { padding: 10px var(--s2); font-size: .82rem; border-radius: var(--r-sm); }
+
+    /* ─── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      padding: var(--s3) 0 var(--s1);
+      display: grid;
+      grid-template-columns: 1.25fr .95fr;
+      gap: var(--s2);
+    }
+    .hero-main {
+      overflow: hidden; position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.95)),
+                  radial-gradient(circle at top right, #c7eef8 0, transparent 30%);
+    }
+    .hero-main::before {
+      content: ''; position: absolute;
+      right: -60px; top: -80px;
+      width: 230px; height: 230px;
+      background: radial-gradient(circle, #b7ebf7 0, rgba(183,235,247,0) 70%);
+    }
+    .hero-grid {
+      position: relative;
+      padding: var(--s3);
+      display: grid; grid-template-columns: 1.2fr .8fr;
+      gap: var(--s2); align-items: end;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: var(--s1);
+      background: #eff8fb; border: 1px solid #d8eef5; color: var(--primary);
+      padding: var(--s1) var(--s2); border-radius: var(--r-pill);
+      font-weight: 700; font-size: .82rem;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: .98; letter-spacing: -.02em;
+      margin: var(--s2) 0 var(--s2); max-width: 10ch;
+    }
+    .lead { font-size: 1rem; line-height: 1.65; color: var(--muted); max-width: 60ch; margin: 0 0 var(--s2); }
+
+    .quick-stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s2); }
+    .mini {
+      padding: var(--s2); border-radius: var(--r-md);
+      background: rgba(255,255,255,.72); border: 1px solid #e1eef3;
+    }
+    .mini b    { display: block; font-size: 1.35rem; letter-spacing: -.03em; font-family: var(--font-display); }
+    .mini span { display: block; font-size: .82rem; color: var(--muted); margin-top: 4px; }
+
+    .hero-side { padding: var(--s2); background: linear-gradient(180deg, #fff, #fbfeff); }
+    .hero-side h3 { margin-bottom: var(--s1); font-size: 1.12rem; letter-spacing: -.02em; }
+
+    /* ─── Meter ──────────────────────────────────────────────────── */
+    .meter {
+      height: 10px; background: #edf5f8;
+      border-radius: var(--r-pill); overflow: hidden;
+      border: 1px solid #e0edf2;
+    }
+    .meter > span {
+      display: block; height: 100%;
+      background: linear-gradient(90deg, var(--sea-deep), var(--primary-2));
+      border-radius: var(--r-pill);
+      transition: width .6s ease;
+    }
+
+    /* ─── Widget grid ────────────────────────────────────────────── */
+    .widget-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: var(--s2); margin: var(--s2) 0;
+    }
+    .widget { padding: var(--s2); }
+    .widget-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: var(--s1);
+      margin-bottom: var(--s1);
+    }
+    .widget-top h3 { font-size: 1rem; letter-spacing: -.01em; }
+    .big { font-size: 1.8rem; font-weight: 800; letter-spacing: -.05em; font-family: var(--font-display); }
+    .muted { color: var(--muted); }
+
+    /* ─── Layout (2-col) ─────────────────────────────────────────── */
+    .layout {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: var(--s2);
+    }
+
+    /* ─── Section head ───────────────────────────────────────────── */
+    .section-head {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: var(--s2);
+      margin: var(--s1) 0 var(--s1);
+    }
+    .section-head h2 { font-size: 1.4rem; font-family: var(--font-display); letter-spacing: -.02em; }
+    .section-desc { font-size: .88rem; color: var(--muted); margin-top: 4px; }
+
+    /* ─── Map ────────────────────────────────────────────────────── */
+    .map-card { overflow: hidden; }
+    .map-top {
+      padding: var(--s2) var(--s2) var(--s1);
+      display: flex; justify-content: space-between;
+      gap: var(--s2); align-items: center; flex-wrap: wrap;
+    }
+    .map-top h3 { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: -.01em; }
+    .map-subtitle { font-size: .82rem; color: var(--muted); margin-top: 4px; }
+
+    .filters { display: flex; gap: var(--s1); flex-wrap: wrap; }
+    .chip {
+      padding: 10px var(--s2); border-radius: var(--r-pill);
+      border: 1px solid var(--line); background: white;
+      cursor: pointer; font-weight: 700; font-size: .84rem;
+      font-family: var(--font-body);
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .chip.active { background: #eaf7fb; border-color: #cdeaf3; color: var(--primary); }
+
+    .beach-map-wrap { padding: var(--s1) var(--s2) var(--s2); }
+    .beach-map {
+      position: relative; border: 1px solid var(--line);
+      border-radius: var(--r-xl); overflow: hidden;
+      background: linear-gradient(180deg, var(--sea) 0 31%, var(--sea-deep) 31% 34%, var(--sand) 34% 100%);
+      min-height: 560px;
+    }
+    .sea-line {
+      position: absolute; left: 0; right: 0; top: 31%; height: 26px;
+      background: repeating-linear-gradient(
+        90deg, rgba(255,255,255,.55) 0 24px, rgba(255,255,255,0) 24px 44px
+      );
+    }
+    .zone-label {
+      position: absolute; left: var(--s2);
+      padding: var(--s1) var(--s2);
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,.8); backdrop-filter: blur(6px);
+      font-weight: 800; font-size: .76rem;
+      border: 1px solid rgba(255,255,255,.6);
+    }
+    .zone-water   { top: 36%; }
+    .zone-family  { top: 56%; }
+    .zone-shelter { top: 76%; }
+
+    .map-grid {
+      position: absolute; left: var(--s3); right: var(--s3);
+      top: 38%; bottom: var(--s3);
+      display: grid;
+      grid-template-columns: repeat(8,1fr);
+      grid-template-rows: repeat(8,1fr);
+      gap: var(--s1);
+    }
+
+    /* ─── Plot buttons ───────────────────────────────────────────── */
+    .plot {
+      border-radius: var(--r-sm); border: 1px solid rgba(18,48,59,.08);
+      background: rgba(255,255,255,.38); backdrop-filter: blur(2px);
+      cursor: pointer;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      padding: var(--s1); min-height: 0;
+      /* shape indicator for accessibility: free = circle, reserved = X */
+      position: relative;
+      transition: transform .18s, box-shadow .18s, background .18s, outline .1s;
+    }
+    .plot:hover             { transform: translateY(-1px); box-shadow: 0 10px 16px rgba(0,0,0,.08); }
+    .plot:focus-visible     { outline: 3px solid var(--primary-2); outline-offset: 2px; }
+    .plot.free              { background: rgba(255,255,255,.42); }
+    .plot.reserved          { background: rgba(255,255,255,.14); opacity: .52; cursor: not-allowed; }
+    .plot.selected          { outline: 3px solid var(--primary); background: rgba(255,255,255,.86); }
+    .plot.recommended       { box-shadow: 0 0 0 2px rgba(19,130,167,.22) inset; background: rgba(255,255,255,.65); }
+
+    .plot small {
+      font-size: .67rem; font-weight: 800; color: #2a5564;
+      background: rgba(255,255,255,.8);
+      padding: 4px 6px; border-radius: var(--s1);
+    }
+    /* Shape indicator (for colorblind users) */
+    .plot::before {
+      content: '';
+      position: absolute; top: 6px; right: 6px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--ok-text); opacity: .6;
+    }
+    .plot.reserved::before  { border-radius: 0; transform: rotate(45deg); background: var(--danger-text); }
+    .plot.selected::before  { background: var(--primary); opacity: 1; }
+
+    .legend { display: flex; gap: var(--s1); flex-wrap: wrap; padding: 0 var(--s2) var(--s2); }
+    .legend .item { display: flex; align-items: center; gap: var(--s1); font-size: .82rem; color: var(--muted); }
+    .swatch {
+      width: 16px; height: 16px; border-radius: 6px;
+      border: 1px solid rgba(18,48,59,.12); background: rgba(255,255,255,.42);
+    }
+    .swatch.r   { background: rgba(255,255,255,.18); opacity: .52; }
+    .swatch.s   { outline: 2px solid var(--primary); outline-offset: -2px; }
+    .swatch.rec { background: rgba(255,255,255,.75); box-shadow: 0 0 0 2px rgba(19,130,167,.18) inset; }
+
+    /* ─── Form panel ─────────────────────────────────────────────── */
+    .panel { padding: var(--s2); }
+
+    .field { display: grid; gap: var(--s1); }
+    .field label { font-weight: 700; font-size: .9rem; }
+    input, select {
+      width: 100%; padding: var(--s2);
+      border: 1px solid var(--line); border-radius: var(--r-md);
+      background: white; font-size: .95rem; color: var(--text);
+      font-family: var(--font-body);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-2);
+      box-shadow: 0 0 0 3px rgba(19,130,167,.12);
+    }
+
+    /* ─── Segmented control ──────────────────────────────────────── */
+    .segmented { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--s1); }
+    .segmented .btn {
+      padding: var(--s2); border: 1px solid var(--line);
+      background: white; color: var(--text); border-radius: var(--r-md);
+    }
+    .segmented .btn.active { background: #ebf8fb; border-color: #cae9f2; color: var(--primary); }
+
+    /* ─── Option cards ───────────────────────────────────────────── */
+    .options { display: grid; grid-template-columns: repeat(2,1fr); gap: var(--s1); }
+    .opt {
+      padding: var(--s2); border-radius: var(--r-md);
+      border: 1px solid var(--line); background: #fff;
+      cursor: pointer; display: flex; align-items: flex-start; gap: var(--s1);
+      transition: background .15s, border-color .15s;
+    }
+    .opt input { width: auto; margin-top: 4px; accent-color: var(--primary); }
+    .opt.active { background: #f1fbfe; border-color: #cdeaf3; }
+    .opt strong { font-size: .9rem; }
+    .opt .muted { font-size: .82rem; }
+
+    /* ─── Booking summary (shared component) ─────────────────────── */
+    .booking-summary {
+      padding: var(--s2); border-radius: var(--r-md);
+      background: #f7fbfd; border: 1px solid var(--line);
+    }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      gap: var(--s1); padding: 6px 0;
+      font-size: .92rem; border-bottom: 1px solid var(--line);
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row span:last-child { font-weight: 800; text-align: right; }
+
+    /* ─── QR card ────────────────────────────────────────────────── */
+    .qr-card {
+      padding: var(--s2); border-radius: var(--r-md);
+      background: linear-gradient(180deg, #fff, #f7fbfd);
+      border: 1px solid var(--line);
+    }
+    .qr-wrap { display: grid; grid-template-columns: 104px 1fr; gap: var(--s2); align-items: center; }
+    .qr-box {
+      width: 104px; height: 104px; border-radius: var(--r-md);
+      background: white; border: 1px solid var(--line);
+      display: grid; place-items: center; overflow: hidden;
+    }
+    .coords {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .87rem; background: #0f1f26; color: #e9f8fd;
+      padding: var(--s2); border-radius: var(--r-md); overflow: auto;
+    }
+
+    /* ─── Notice ─────────────────────────────────────────────────── */
+    .notice {
+      padding: var(--s2); border-radius: var(--r-md);
+      background: #fff9ea; border: 1px solid #f6e2a7;
+      color: #785600; font-size: .88rem;
+    }
+
+    /* ─── Bookings list ──────────────────────────────────────────── */
+    .bookings-list { display: grid; gap: var(--s2); }
+    .booking-item {
+      border: 1px solid var(--line); background: #fff;
+      border-radius: var(--r-md); padding: var(--s2);
+      transition: box-shadow .18s;
+    }
+    .booking-item:hover { box-shadow: var(--shadow-sm); }
+    .booking-item h4 { font-size: 1rem; margin-bottom: var(--s1); }
+    .booking-meta {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: var(--s1); font-size: .86rem; color: var(--muted);
+      margin: var(--s1) 0;
+    }
+    .booking-actions { display: flex; gap: var(--s1); flex-wrap: wrap; }
+    .booking-empty {
+      text-align: center; padding: var(--s5) var(--s3);
+      color: var(--muted);
+    }
+    .booking-empty .empty-icon { font-size: 2.5rem; margin-bottom: var(--s2); }
+    .booking-empty p { margin: var(--s1) 0 var(--s2); }
+
+    /* ─── Bottom nav ─────────────────────────────────────────────── */
+    .bottom-nav {
+      position: fixed; left: 50%; transform: translateX(-50%);
+      bottom: var(--s2); z-index: 40;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(16px);
+      border: 1px solid rgba(215,232,239,.9); border-radius: var(--r-xl);
+      box-shadow: var(--shadow-md);
+      padding: var(--s1); display: flex; gap: var(--s1);
+    }
+    .bottom-nav a {
+      padding: var(--s2); border-radius: var(--r-md);
+      text-decoration: none; font-weight: 800; font-size: .86rem;
+      color: var(--muted); transition: background .15s, color .15s;
+    }
+    .bottom-nav a.active { background: #ecf8fb; color: var(--primary); }
+
+    /* ─── Dialog ─────────────────────────────────────────────────── */
+    dialog {
+      border: none; border-radius: var(--r-xl); padding: 0;
+      box-shadow: var(--shadow-lg); width: min(92vw, 560px);
+    }
+    dialog::backdrop { background: rgba(10,16,21,.45); backdrop-filter: blur(3px); }
+    .modal { padding: var(--s3); }
+    .modal h3 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: var(--s1); }
+
+    /* ─── Toast ──────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; top: 86px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      background: #10252d; color: #eefcff;
+      padding: var(--s2);
+      border-radius: var(--r-pill); box-shadow: var(--shadow-lg);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(4px); }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    .desktop-hide { display: none; }
+
+    @media (max-width: 980px) {
+      .hero, .layout          { grid-template-columns: 1fr; }
+      .hero-grid              { grid-template-columns: 1fr; }
+      .widget-grid            { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .shell                  { padding-inline: var(--s2); }
+      .widget-grid, .options,
+      .booking-meta, .qr-wrap { grid-template-columns: 1fr; }
+      .segmented              { grid-template-columns: 1fr; }
+      .beach-map              { min-height: 470px; }
+      .map-grid               { gap: var(--s1); left: var(--s2); right: var(--s2); top: 39%; bottom: var(--s2); }
+      .plot small             { font-size: .62rem; padding: 3px 5px; }
+      .bottom-nav             { width: calc(100% - var(--s3)); justify-content: space-between; }
+      .desktop-hide           { display: inline-flex; }
+      .topbar .pill           { display: none; }
+    }
+
+    /* ─── Micro-animations ───────────────────────────────────────── */
+    @keyframes plotPop {
+      0%   { transform: scale(.88); opacity: 0; }
+      60%  { transform: scale(1.05); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    .plot.selected { animation: plotPop .22s ease; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-main, .hero-side { animation: fadeUp .4s ease both; }
+    .hero-side             { animation-delay: .08s; }
+    .widget-grid .card:nth-child(1) { animation: fadeUp .4s .14s ease both; }
+    .widget-grid .card:nth-child(2) { animation: fadeUp .4s .20s ease both; }
+    .widget-grid .card:nth-child(3) { animation: fadeUp .4s .26s ease both; }
   </style>
 </head>
 <body>
-  <div class="topbar">
+
+  <!-- ── Topbar ──────────────────────────────────────────────── -->
+  <div class="topbar" role="banner">
     <div class="topbar-inner">
       <div class="brand">
-        <div class="brand-mark">S</div>
+        <div class="brand-mark" aria-hidden="true">S</div>
         <div class="brand-text">
           <strong>StrandSmart</strong>
-          <span>Lomma Beach • positionsbaserad strandbokning</span>
+          <span>Lomma Beach · positionsbaserad strandbokning</span>
         </div>
       </div>
-      <div class="pill" id="todayBadge">Laddar strandstatus…</div>
+      <div class="pill" id="todayBadge" aria-live="polite">Laddar strandstatus…</div>
     </div>
   </div>
 
   <div class="shell">
-    <section class="hero" id="start">
+
+    <!-- ── Hero ────────────────────────────────────────────────── -->
+    <section class="hero" id="start" aria-labelledby="heroHeading">
       <div class="hero-main card">
         <div class="hero-grid">
           <div>
-            <div class="eyebrow">📍 Lomma Beach • sommarläge aktiverat</div>
-            <h1>Boka din strandplats. Få exakt position.</h1>
+            <div class="eyebrow" aria-hidden="true">📍 Lomma Beach · sommarläge aktiverat</div>
+            <h1 id="heroHeading">Boka din strandplats.<br><em>Få exakt position.</em></h1>
             <p class="lead">En hyperrealistisk demo av en kommunal strandbokningstjänst med zoner, koordinater, digital check-in, live-liknande status och sparade bokningar direkt i din webbläsare.</p>
-            <div class="cta-row">
-              <a href="#boka" class="btn btn-primary">Boka plats nu</a>
-              <button class="btn btn-secondary" id="scrollBookingsBtn">Mina bokningar</button>
+            <div class="cluster">
+              <a href="#boka" class="btn btn--primary">Boka plats nu</a>
+              <button class="btn btn--secondary" id="scrollBookingsBtn">Mina bokningar</button>
             </div>
           </div>
-          <div class="quick-stats">
-            <div class="mini">
-              <b id="availableNow">—</b>
+          <div class="quick-stats" role="list" aria-label="Strandöversikt">
+            <div class="mini" role="listitem">
+              <b id="availableNow" aria-label="Lediga platser">—</b>
               <span>lediga platser just nu</span>
             </div>
-            <div class="mini">
-              <b id="waterTempHero">—</b>
+            <div class="mini" role="listitem">
+              <b id="waterTempHero" aria-label="Badvattentemperatur">—</b>
               <span>badvattentemperatur</span>
             </div>
-            <div class="mini">
-              <b id="parkingHero">—</b>
+            <div class="mini" role="listitem">
+              <b id="parkingHero" aria-label="Parkeringsbeläggning">—</b>
               <span>parkeringsbeläggning</span>
             </div>
-            <div class="mini">
+            <div class="mini" role="listitem">
               <b>3×3 m</b>
               <span>egen yta per bokning</span>
             </div>
           </div>
         </div>
       </div>
-      <aside class="hero-side card">
-        <h3>Dagens strandläge</h3>
-        <p class="muted">Automatiskt uppdaterad demoöversikt för Lomma strandzoner.</p>
+      <aside class="hero-side card" aria-labelledby="beachStatusHeading">
+        <h3 id="beachStatusHeading">Dagens strandläge</h3>
+        <p class="muted" style="margin:0 0 var(--s2)">Automatiskt uppdaterad demoöversikt för Lomma strandzoner.</p>
         <div class="stack">
           <div>
             <div class="widget-top">
               <span class="muted">Badtemperatur</span>
-              <span class="status-ok">Stabilt badläge</span>
+              <span class="status status--ok" id="waterStatusBadge">Stabilt badläge</span>
             </div>
-            <div class="big" id="waterTemp">—</div>
-            <div class="meter"><span id="waterMeter" style="width:50%"></span></div>
+            <div class="big" id="waterTemp" aria-live="polite">—</div>
+            <div class="meter" role="meter" aria-label="Vattentemperatur"><span id="waterMeter" style="width:50%"></span></div>
           </div>
           <div>
             <div class="widget-top">
               <span class="muted">Parkeringsstatus</span>
-              <span id="parkingStatusBadge" class="status-warn">Måttligt tryck</span>
+              <span class="status status--warn" id="parkingStatusBadge">Måttligt tryck</span>
             </div>
-            <div class="big" id="parkingStatus">—</div>
-            <div class="meter"><span id="parkingMeter" style="width:50%"></span></div>
+            <div class="big" id="parkingStatus" aria-live="polite">—</div>
+            <div class="meter" role="meter" aria-label="Parkeringsbeläggning"><span id="parkingMeter" style="width:50%"></span></div>
           </div>
           <div>
             <div class="widget-top">
               <span class="muted">Vind i strandnivå</span>
-              <span class="status-ok">Lugnt</span>
+              <span class="status status--ok">Lugnt</span>
             </div>
-            <div class="big" id="windStatus">—</div>
-            <div class="meter"><span id="windMeter" style="width:35%"></span></div>
+            <div class="big" id="windStatus" aria-live="polite">—</div>
+            <div class="meter" role="meter" aria-label="Vindstyrka"><span id="windMeter" style="width:35%"></span></div>
           </div>
         </div>
       </aside>
     </section>
 
-    <section class="widget-grid" aria-label="snabbstatus">
+    <!-- ── Widget strip ─────────────────────────────────────────── -->
+    <section class="widget-grid" aria-label="Funktionsöversikt">
       <div class="card widget">
-        <div class="widget-top"><h3>Strandzoner</h3><span class="muted">Karta & tillval</span></div>
-        <p class="muted">Välj mellan nära vatten, barnvänligt område eller vindskyddad zon. Rekommenderad plats markeras automatiskt.</p>
+        <div class="widget-top"><h3>Strandzoner</h3><span class="muted">Karta &amp; tillval</span></div>
+        <p class="muted" style="margin:0">Välj nära vatten, barnvänligt eller vindskyddad zon. Rekommenderad plats markeras automatiskt.</p>
       </div>
       <div class="card widget">
         <div class="widget-top"><h3>Check-in</h3><span class="muted">30 min</span></div>
-        <p class="muted">När bokningen startar checkar du in på plats. Missad aktivering frigör platsen automatiskt i demo-logiken.</p>
+        <p class="muted" style="margin:0">När bokningen startar checkar du in på plats. Missad aktivering frigör platsen automatiskt i demo-logiken.</p>
       </div>
       <div class="card widget">
         <div class="widget-top"><h3>Mobilstöd</h3><span class="muted">GitHub Pages</span></div>
-        <p class="muted">Hela upplevelsen är byggd som en statisk webbapp. Bokningar sparas med LocalStorage i samma domän och webbläsare.</p>
+        <p class="muted" style="margin:0">Hela upplevelsen är byggd som en statisk webbapp. Bokningar sparas med LocalStorage i samma webbläsare.</p>
       </div>
     </section>
 
-    <section class="layout" id="boka">
+    <!-- ── Map + Booking ────────────────────────────────────────── -->
+    <section class="layout" id="boka" aria-labelledby="bookingHeading">
       <div>
         <div class="section-head">
           <div>
-            <h2>Interaktiv strandkarta</h2>
-            <div class="muted">Klicka på en plats eller låt systemet rekommendera en utifrån dina val.</div>
+            <h2 id="mapHeading">Interaktiv strandkarta</h2>
+            <div class="section-desc">Klicka på en plats eller låt systemet rekommendera en utifrån dina val.</div>
           </div>
-          <div class="filters" id="zoneFilterBar">
+          <div class="filters" id="zoneFilterBar" role="group" aria-label="Filtrera zoner">
             <button class="chip active" data-zone-filter="all">Alla zoner</button>
             <button class="chip" data-zone-filter="water">Nära vatten</button>
             <button class="chip" data-zone-filter="family">Barnvänligt</button>
@@ -264,25 +649,25 @@
         <div class="card map-card">
           <div class="map-top">
             <div>
-              <h3 style="margin:0">Lomma Beach – zonöversikt</h3>
-              <div class="muted">64 bokningsbara strandytor • 3-timmarspass • exakt koordinat per bokning</div>
+              <h3>Lomma Beach – zonöversikt</h3>
+              <div class="map-subtitle">64 bokningsbara strandytor · 3-timmarspass · exakt koordinat per bokning</div>
             </div>
-            <button class="btn btn-secondary desktop-hide" id="scrollBookBtn2">Till bokning</button>
+            <button class="btn btn--secondary btn--sm desktop-hide" id="scrollBookBtn2">Till bokning ↓</button>
           </div>
           <div class="beach-map-wrap">
             <div class="beach-map" id="beachMap">
-              <div class="sea-line"></div>
-              <div class="zone-label zone-water">Zon A • nära vatten</div>
-              <div class="zone-label zone-family">Zon B • barnvänligt</div>
-              <div class="zone-label zone-shelter">Zon C • vindskyddat</div>
-              <div class="map-grid" id="mapGrid"></div>
+              <div class="sea-line" aria-hidden="true"></div>
+              <div class="zone-label zone-water"  aria-hidden="true">Zon A · nära vatten</div>
+              <div class="zone-label zone-family"  aria-hidden="true">Zon B · barnvänligt</div>
+              <div class="zone-label zone-shelter" aria-hidden="true">Zon C · vindskyddat</div>
+              <div class="map-grid" id="mapGrid" role="grid" aria-label="Strandplatser"></div>
             </div>
           </div>
-          <div class="legend">
-            <div class="item"><span class="swatch"></span> Ledig</div>
-            <div class="item"><span class="swatch rec"></span> Rekommenderad</div>
-            <div class="item"><span class="swatch s"></span> Vald</div>
-            <div class="item"><span class="swatch r"></span> Upptagen</div>
+          <div class="legend" aria-label="Kartlegende">
+            <div class="item"><span class="swatch" aria-hidden="true"></span> Ledig</div>
+            <div class="item"><span class="swatch rec" aria-hidden="true"></span> Rekommenderad</div>
+            <div class="item"><span class="swatch s" aria-hidden="true"></span> Vald</div>
+            <div class="item"><span class="swatch r" aria-hidden="true"></span> Upptagen</div>
           </div>
         </div>
       </div>
@@ -290,43 +675,56 @@
       <div>
         <div class="section-head">
           <div>
-            <h2>Skapa bokning</h2>
-            <div class="muted">Fyll i dina val så genereras plats, koordinat och check-in-underlag.</div>
+            <h2 id="bookingHeading">Skapa bokning</h2>
+            <div class="section-desc">Fyll i dina val – plats, koordinat och check-in-underlag genereras automatiskt.</div>
           </div>
         </div>
         <div class="card panel">
           <div class="stack">
             <div class="field">
               <label for="visitorName">Namn</label>
-              <input id="visitorName" type="text" placeholder="För- och efternamn" />
+              <input id="visitorName" type="text" placeholder="För- och efternamn" autocomplete="name" />
             </div>
             <div class="field">
               <label for="phone">Mobilnummer</label>
-              <input id="phone" type="tel" placeholder="07X-XXX XX XX" />
+              <input id="phone" type="tel" placeholder="07X-XXX XX XX" autocomplete="tel" />
             </div>
             <div class="field">
               <label for="bookingDate">Datum</label>
               <input id="bookingDate" type="date" />
             </div>
             <div class="field">
-              <label>Tidspass</label>
-              <div class="segmented" id="timeSlots">
-                <button type="button" data-slot="10:00–13:00" class="active">10:00–13:00</button>
-                <button type="button" data-slot="13:00–16:00">13:00–16:00</button>
-                <button type="button" data-slot="16:00–19:00">16:00–19:00</button>
+              <label id="timeSlotsLabel">Tidspass</label>
+              <div class="segmented" id="timeSlots" role="group" aria-labelledby="timeSlotsLabel">
+                <button type="button" class="btn active" data-slot="10:00–13:00">10:00–13:00</button>
+                <button type="button" class="btn" data-slot="13:00–16:00">13:00–16:00</button>
+                <button type="button" class="btn" data-slot="16:00–19:00">16:00–19:00</button>
               </div>
             </div>
-            <div class="field">
-              <label>Tillval</label>
+            <fieldset style="border:none;padding:0;margin:0">
+              <legend style="font-weight:700;font-size:.9rem;margin-bottom:var(--s1)">Zon­preferens</legend>
               <div class="options" id="optionsWrap">
-                <label class="opt active"><input type="radio" name="zonePref" value="water" checked /> <span><strong>Nära vatten</strong><br><span class="muted">Kort avstånd till strandlinjen</span></span></label>
-                <label class="opt"><input type="radio" name="zonePref" value="family" /> <span><strong>Barnvänligt område</strong><br><span class="muted">Lugnare mittzon med mer utrymme</span></span></label>
-                <label class="opt"><input type="radio" name="zonePref" value="shelter" /> <span><strong>Vindskyddad zon</strong><br><span class="muted">Längre upp på stranden</span></span></label>
-                <label class="opt"><input type="radio" name="zonePref" value="auto" /> <span><strong>Systemet väljer bäst plats</strong><br><span class="muted">Balans mellan läge och tillgänglighet</span></span></label>
+                <label class="opt active">
+                  <input type="radio" name="zonePref" value="water" checked />
+                  <span><strong>Nära vatten</strong><br><span class="muted">Kort avstånd till strandlinjen</span></span>
+                </label>
+                <label class="opt">
+                  <input type="radio" name="zonePref" value="family" />
+                  <span><strong>Barnvänligt</strong><br><span class="muted">Lugnare mittzon med mer utrymme</span></span>
+                </label>
+                <label class="opt">
+                  <input type="radio" name="zonePref" value="shelter" />
+                  <span><strong>Vindskyddat</strong><br><span class="muted">Längre upp på stranden</span></span>
+                </label>
+                <label class="opt">
+                  <input type="radio" name="zonePref" value="auto" />
+                  <span><strong>Systemet väljer</strong><br><span class="muted">Balans mellan läge och tillgänglighet</span></span>
+                </label>
               </div>
-            </div>
+            </fieldset>
 
-            <div class="booking-summary" id="liveSummary">
+            <!-- Shared summary component -->
+            <div class="booking-summary" id="liveSummary" aria-live="polite" aria-label="Bokningsöversikt">
               <div class="summary-row"><span>Vald plats</span><span id="summaryPlot">Ingen vald ännu</span></div>
               <div class="summary-row"><span>Zon</span><span id="summaryZone">—</span></div>
               <div class="summary-row"><span>Koordinat</span><span id="summaryCoord">Genereras vid bokning</span></div>
@@ -335,404 +733,494 @@
 
             <div class="qr-card">
               <div class="qr-wrap">
-                <div class="qr-box" id="qrBox"></div>
+                <div class="qr-box" id="qrBox" aria-label="Digitalt strandpass QR-kod"></div>
                 <div>
-                  <div style="font-weight:800;margin-bottom:8px">Digitalt strandpass</div>
-                  <div class="muted" style="margin-bottom:10px">Pseudo-QR genereras för bokningen och uppdateras live när plats eller tid ändras.</div>
-                  <div class="coords" id="coordBox">LAT 55.67210 • LON 13.06820</div>
+                  <div style="font-weight:800;margin-bottom:var(--s1)">Digitalt strandpass</div>
+                  <p class="muted" style="margin:0 0 var(--s1);font-size:.88rem">Pseudo-QR genereras för bokningen och uppdateras live när plats eller tid ändras.</p>
+                  <div class="coords" id="coordBox" aria-label="GPS-koordinater">LAT 55.67210 · LON 13.06820</div>
                 </div>
               </div>
             </div>
 
-            <div class="notice">Tips: På GitHub Pages delas inte bokningar mellan olika användare. All data sparas lokalt i din egen webbläsare via LocalStorage.</div>
+            <div class="notice" role="note">
+              Tips: På GitHub Pages delas inte bokningar mellan olika användare. All data sparas lokalt i din egen webbläsare via LocalStorage.
+            </div>
 
-            <div class="cta-row">
-              <button class="btn btn-primary" id="bookBtn">Bekräfta bokning</button>
-              <button class="btn btn-secondary" id="recommendBtn">Hitta bästa plats</button>
+            <div class="cluster">
+              <button class="btn btn--primary" id="bookBtn">Bekräfta bokning</button>
+              <button class="btn btn--secondary" id="recommendBtn">Hitta bästa plats</button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="mina-bokningar" style="margin-top:22px">
+    <!-- ── My Bookings ──────────────────────────────────────────── -->
+    <section id="mina-bokningar" style="margin-top:var(--s3)" aria-labelledby="myBookingsHeading">
       <div class="section-head">
         <div>
-          <h2>Mina bokningar</h2>
-          <div class="muted">Sparas mellan omladdningar i samma webbläsare.</div>
+          <h2 id="myBookingsHeading">Mina bokningar</h2>
+          <div class="section-desc">Sparas mellan omladdningar i samma webbläsare.</div>
         </div>
-        <div class="cta-row">
-          <button class="btn btn-secondary" id="exportBtn">Exportera JSON</button>
-          <button class="btn btn-secondary" id="clearBtn">Nollställ data</button>
+        <div class="cluster">
+          <button class="btn btn--secondary btn--sm" id="exportBtn">Exportera JSON</button>
+          <button class="btn btn--secondary btn--sm" id="clearBtn">Nollställ data</button>
         </div>
       </div>
       <div class="card panel">
-        <div class="bookings-list" id="bookingsList"></div>
+        <div class="bookings-list" id="bookingsList" aria-live="polite"></div>
       </div>
-      <div class="footer-note">Demo för prototyp- och presentationssyfte. Ingen faktisk kommunal tjänst eller realtidskoppling används.</div>
+      <p class="muted" style="text-align:center;font-size:.82rem;margin-top:var(--s2)">
+        Demo för prototyp- och presentationssyfte. Ingen faktisk kommunal tjänst eller realtidskoppling används.
+      </p>
     </section>
   </div>
 
-  <nav class="bottom-nav">
+  <!-- ── Bottom nav ────────────────────────────────────────────── -->
+  <nav class="bottom-nav" aria-label="Sidonavigering">
     <a href="#start" class="active">Översikt</a>
     <a href="#boka">Boka</a>
     <a href="#mina-bokningar">Bokningar</a>
   </nav>
 
-  <dialog id="bookingDialog">
+  <!-- ── Booking confirmation dialog ──────────────────────────── -->
+  <dialog id="bookingDialog" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
     <div class="modal">
-      <h3>Bokning skapad</h3>
-      <p class="muted" id="dialogText">Din plats är reserverad.</p>
-      <div class="booking-summary" style="margin:14px 0 16px">
+      <h3 id="dialogTitle">Bokning skapad ✓</h3>
+      <p class="muted" id="dialogDesc" style="margin:var(--s1) 0 var(--s2)">Din plats är reserverad.</p>
+      <!-- Reuses .booking-summary component -->
+      <div class="booking-summary" style="margin-bottom:var(--s2)">
         <div class="summary-row"><span>Strandplats</span><span id="dialogPlot"></span></div>
         <div class="summary-row"><span>Koordinat</span><span id="dialogCoord"></span></div>
         <div class="summary-row"><span>Check-in-kod</span><span id="dialogCode"></span></div>
       </div>
-      <div class="cta-row">
-        <button class="btn btn-primary" id="closeDialogBtn">Perfekt</button>
+      <div class="cluster">
+        <button class="btn btn--primary" id="closeDialogBtn">Perfekt</button>
       </div>
     </div>
   </dialog>
 
-  <div class="toast" id="toast"></div>
+  <!-- ── Toast ────────────────────────────────────────────────── -->
+  <div class="toast" id="toast" role="status" aria-live="assertive" aria-atomic="true"></div>
 
   <script>
+    /* ─── Constants ─────────────────────────────────────────── */
     const STORAGE_KEY = 'strandsmart_lomma_v3';
+
+    /* ─── App state ─────────────────────────────────────────── */
     const state = {
-      selectedPlotId: null,
-      selectedZoneFilter: 'all',
-      selectedSlot: '10:00–13:00',
-      bookings: [],
-      plots: [],
-      metrics: null,
+      selectedPlotId:    null,
+      selectedZoneFilter:'all',
+      selectedSlot:      '10:00–13:00',
+      bookings:          [],
+      plots:             [],
+      metrics:           null,
     };
 
+    /* ─── Element refs ──────────────────────────────────────── */
+    const $ = id => document.getElementById(id);
     const els = {
-      mapGrid: document.getElementById('mapGrid'),
-      summaryPlot: document.getElementById('summaryPlot'),
-      summaryZone: document.getElementById('summaryZone'),
-      summaryCoord: document.getElementById('summaryCoord'),
-      summaryCheckin: document.getElementById('summaryCheckin'),
-      coordBox: document.getElementById('coordBox'),
-      qrBox: document.getElementById('qrBox'),
-      bookingsList: document.getElementById('bookingsList'),
-      bookBtn: document.getElementById('bookBtn'),
-      recommendBtn: document.getElementById('recommendBtn'),
-      exportBtn: document.getElementById('exportBtn'),
-      clearBtn: document.getElementById('clearBtn'),
-      bookingDate: document.getElementById('bookingDate'),
-      visitorName: document.getElementById('visitorName'),
-      phone: document.getElementById('phone'),
-      todayBadge: document.getElementById('todayBadge'),
-      availableNow: document.getElementById('availableNow'),
-      waterTemp: document.getElementById('waterTemp'),
-      waterTempHero: document.getElementById('waterTempHero'),
-      waterMeter: document.getElementById('waterMeter'),
-      parkingHero: document.getElementById('parkingHero'),
-      parkingStatus: document.getElementById('parkingStatus'),
-      parkingMeter: document.getElementById('parkingMeter'),
-      parkingStatusBadge: document.getElementById('parkingStatusBadge'),
-      windStatus: document.getElementById('windStatus'),
-      windMeter: document.getElementById('windMeter'),
-      dialog: document.getElementById('bookingDialog'),
-      dialogText: document.getElementById('dialogText'),
-      dialogPlot: document.getElementById('dialogPlot'),
-      dialogCoord: document.getElementById('dialogCoord'),
-      dialogCode: document.getElementById('dialogCode'),
-      closeDialogBtn: document.getElementById('closeDialogBtn'),
-      toast: document.getElementById('toast'),
-      scrollBookingsBtn: document.getElementById('scrollBookingsBtn'),
-      scrollBookBtn2: document.getElementById('scrollBookBtn2')
+      mapGrid:            $('mapGrid'),
+      summaryPlot:        $('summaryPlot'),
+      summaryZone:        $('summaryZone'),
+      summaryCoord:       $('summaryCoord'),
+      summaryCheckin:     $('summaryCheckin'),
+      coordBox:           $('coordBox'),
+      qrBox:              $('qrBox'),
+      bookingsList:       $('bookingsList'),
+      bookBtn:            $('bookBtn'),
+      recommendBtn:       $('recommendBtn'),
+      exportBtn:          $('exportBtn'),
+      clearBtn:           $('clearBtn'),
+      bookingDate:        $('bookingDate'),
+      visitorName:        $('visitorName'),
+      phone:              $('phone'),
+      todayBadge:         $('todayBadge'),
+      availableNow:       $('availableNow'),
+      waterTemp:          $('waterTemp'),
+      waterTempHero:      $('waterTempHero'),
+      waterMeter:         $('waterMeter'),
+      parkingHero:        $('parkingHero'),
+      parkingStatus:      $('parkingStatus'),
+      parkingMeter:       $('parkingMeter'),
+      parkingStatusBadge: $('parkingStatusBadge'),
+      windStatus:         $('windStatus'),
+      windMeter:          $('windMeter'),
+      dialog:             $('bookingDialog'),
+      dialogText:         $('dialogDesc'),
+      dialogPlot:         $('dialogPlot'),
+      dialogCoord:        $('dialogCoord'),
+      dialogCode:         $('dialogCode'),
+      closeDialogBtn:     $('closeDialogBtn'),
+      toast:              $('toast'),
+      scrollBookingsBtn:  $('scrollBookingsBtn'),
+      scrollBookBtn2:     $('scrollBookBtn2'),
     };
 
-    function showToast(text){
+    /* ─── Toast ─────────────────────────────────────────────── */
+    function showToast(text) {
       els.toast.textContent = text;
       els.toast.classList.add('show');
       clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=>els.toast.classList.remove('show'), 2200);
+      showToast._t = setTimeout(() => els.toast.classList.remove('show'), 2400);
     }
 
-    function seededNumber(seed, min, max){
+    /* ─── Generic active-class sync ────────────────────────── */
+    // Replaces syncSlotButtons, syncOptionCards, syncZoneFilterBar
+    function syncActive(selector, valueGetter, activeValue) {
+      document.querySelectorAll(selector).forEach(el => {
+        el.classList.toggle('active', valueGetter(el) === activeValue);
+      });
+    }
+
+    function syncSlotButtons()  { syncActive('#timeSlots .btn', el => el.dataset.slot, state.selectedSlot); }
+    function syncOptionCards()  { syncActive('.opt', el => el.querySelector('input')?.value, selectedPreference()); }
+    function syncZoneFilterBar(){ syncActive('[data-zone-filter]', el => el.dataset.zoneFilter, state.selectedZoneFilter); }
+
+    /* ─── Unified refresh ───────────────────────────────────── */
+    // Replaces repeated renderMap() + updateLivePanels() + save() call sites
+    function refresh() {
+      renderMap();
+      updateLivePanels();
+      save();
+    }
+
+    /* ─── Helpers ───────────────────────────────────────────── */
+    function seededNumber(seed, min, max) {
       let h = 2166136261;
-      for(let i=0;i<seed.length;i++){
+      for (let i = 0; i < seed.length; i++) {
         h ^= seed.charCodeAt(i);
-        h += (h<<1) + (h<<4) + (h<<7) + (h<<8) + (h<<24);
+        h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
       }
       const n = Math.abs(h % 10000) / 10000;
-      return min + (max-min) * n;
+      return min + (max - min) * n;
     }
 
-    function formatDate(dateStr){
-      if(!dateStr) return '—';
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
       const d = new Date(dateStr + 'T12:00:00');
-      return d.toLocaleDateString('sv-SE', { weekday:'long', day:'numeric', month:'long' });
+      return d.toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' });
     }
 
-    function slotStart(slot){
-      return slot.split('–')[0];
+    function slotStart(slot) { return slot.split('–')[0]; }
+
+    function checkinDeadline(slot) {
+      const [h, m] = slotStart(slot).split(':').map(Number);
+      const total  = h * 60 + m + 30;
+      return `${String(Math.floor(total / 60)).padStart(2,'0')}:${String(total % 60).padStart(2,'0')}`;
     }
 
-    function checkinDeadline(slot){
-      const start = slotStart(slot);
-      const [h,m] = start.split(':').map(Number);
-      const hh = String(h).padStart(2,'0');
-      const mm = String((m+30)%60).padStart(2,'0');
-      const extra = (m+30)>=60?1:0;
-      return `${String(h+extra).padStart(2,'0')}:${mm}`;
+    function selectedPreference() {
+      return document.querySelector('input[name="zonePref"]:checked')?.value ?? 'water';
     }
 
-    function generateMetrics(){
-      const now = new Date();
+    function zoneName(zone) {
+      return { water:'Nära vatten', family:'Barnvänligt område', shelter:'Vindskyddad zon' }[zone] ?? 'Automatiskt vald';
+    }
+
+    function generateCoords(id) {
+      const idx = Number(id.replace('P',''));
+      const lat  = (55.67210 + (idx % 8) * 0.00011 + Math.floor(idx/8) * 0.00002).toFixed(5);
+      const lon  = (13.06820 + Math.floor(idx/8) * 0.00012 + (idx % 8) * 0.00001).toFixed(5);
+      return { lat, lon, text: `LAT ${lat} · LON ${lon}` };
+    }
+
+    function defaultDate() {
+      const d = new Date();
+      d.setDate(d.getDate() + 1);
+      return d.toISOString().slice(0, 10);
+    }
+
+    /* ─── Metrics ───────────────────────────────────────────── */
+    function generateMetrics() {
+      const now  = new Date();
       const seed = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}-${now.getHours()}`;
       const water = (14 + seededNumber(seed+'water', 0, 9)).toFixed(1);
-      const park = Math.round(seededNumber(seed+'park', 42, 97));
-      const wind = Math.round(seededNumber(seed+'wind', 2, 10));
+      const park  = Math.round(seededNumber(seed+'park',  42, 97));
+      const wind  = Math.round(seededNumber(seed+'wind',   2, 10));
       state.metrics = { water, park, wind };
-      els.waterTemp.textContent = `${water}°C`;
+
+      els.waterTemp.textContent    = `${water}°C`;
       els.waterTempHero.textContent = `${water}°C`;
-      els.waterMeter.style.width = `${Math.min(100, (Number(water)/24)*100)}%`;
-      els.parkingStatus.textContent = `${park}%`;
-      els.parkingHero.textContent = `${park}%`;
-      els.parkingMeter.style.width = `${park}%`;
+      els.waterMeter.style.width   = `${Math.min(100, (Number(water)/24)*100)}%`;
+
+      els.parkingStatus.textContent  = `${park}%`;
+      els.parkingHero.textContent    = `${park}%`;
+      els.parkingMeter.style.width   = `${park}%`;
+
       els.windStatus.textContent = `${wind} m/s`;
-      els.windMeter.style.width = `${Math.min(100, wind*10)}%`;
-      els.todayBadge.textContent = `Lomma • ${now.toLocaleDateString('sv-SE', {day:'numeric', month:'long'})} • ${water}°C i vattnet • parkering ${park}%`;
-      els.parkingStatusBadge.className = park > 85 ? 'status-danger' : park > 65 ? 'status-warn' : 'status-ok';
-      els.parkingStatusBadge.textContent = park > 85 ? 'Högt tryck' : park > 65 ? 'Måttligt tryck' : 'Gott om plats';
+      els.windMeter.style.width  = `${Math.min(100, wind * 10)}%`;
+
+      els.todayBadge.textContent = `Lomma · ${now.toLocaleDateString('sv-SE',{day:'numeric',month:'long'})} · ${water}°C i vattnet · parkering ${park}%`;
+
+      const parkLevel = park > 85 ? 'danger' : park > 65 ? 'warn' : 'ok';
+      const parkLabel = park > 85 ? 'Högt tryck' : park > 65 ? 'Måttligt tryck' : 'Gott om plats';
+      els.parkingStatusBadge.className = `status status--${parkLevel}`;
+      els.parkingStatusBadge.textContent = parkLabel;
     }
 
-    function getZoneByRow(row){
-      if(row <= 2) return 'water';
-      if(row <= 5) return 'family';
+    /* ─── Plot data ─────────────────────────────────────────── */
+    function getZoneByRow(row) {
+      if (row <= 2) return 'water';
+      if (row <= 5) return 'family';
       return 'shelter';
     }
 
-    function zoneName(zone){
-      return zone === 'water' ? 'Nära vatten' : zone === 'family' ? 'Barnvänligt område' : zone === 'shelter' ? 'Vindskyddad zon' : 'Automatiskt vald';
-    }
-
-    function generateCoords(id){
-      const baseLat = 55.67210;
-      const baseLon = 13.06820;
-      const idx = Number(id.replace('P',''));
-      const lat = (baseLat + (idx % 8) * 0.00011 + Math.floor(idx/8) * 0.00002).toFixed(5);
-      const lon = (baseLon + Math.floor(idx/8) * 0.00012 + (idx % 8) * 0.00001).toFixed(5);
-      return { lat, lon, text:`LAT ${lat} • LON ${lon}` };
-    }
-
-    function buildPlots(){
-      const plots = [];
-      for(let r=0;r<8;r++){
-        for(let c=0;c<8;c++){
-          const number = r*8 + c + 1;
-          const id = `P${String(number).padStart(2,'0')}`;
-          const zone = getZoneByRow(r);
+    function buildPlots() {
+      state.plots = [];
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const number = r * 8 + c + 1;
+          const id     = `P${String(number).padStart(2,'0')}`;
+          const zone   = getZoneByRow(r);
           const scenic = seededNumber(id+'scenic', 0, 100);
-          const busy = seededNumber(id+'busy', 0, 100);
+          const busy   = seededNumber(id+'busy',   0, 100);
           const reserved = busy > 74 && !(zone === 'shelter' && scenic < 25);
-          plots.push({ id, row:r, col:c, zone, reserved, scenic });
+          state.plots.push({ id, row: r, col: c, zone, reserved, scenic });
         }
       }
-      state.plots = plots;
     }
 
-    function selectedPreference(){
-      const checked = document.querySelector('input[name="zonePref"]:checked');
-      return checked ? checked.value : 'water';
-    }
-
-    function recommendedPlot(){
-      const pref = selectedPreference();
-      let candidates = state.plots.filter(p => !isActuallyReserved(p.id));
-      if(pref !== 'auto'){
-        const match = candidates.filter(p => p.zone === pref);
-        if(match.length) candidates = match;
-      }
-      candidates = candidates.sort((a,b) => b.scenic - a.scenic);
-      return candidates[0] || null;
-    }
-
-    function isActuallyReserved(plotId){
-      const plot = state.plots.find(p=>p.id===plotId);
-      const storedReserved = state.bookings.some(b => b.plotId === plotId && b.date === els.bookingDate.value && b.slot === state.selectedSlot && b.status !== 'released');
+    function isActuallyReserved(plotId) {
+      const plot = state.plots.find(p => p.id === plotId);
+      const storedReserved = state.bookings.some(b =>
+        b.plotId === plotId &&
+        b.date   === els.bookingDate.value &&
+        b.slot   === state.selectedSlot &&
+        b.status !== 'released'
+      );
       return Boolean(plot?.reserved || storedReserved);
     }
 
-    function renderMap(){
+    function recommendedPlot() {
+      const pref = selectedPreference();
+      let candidates = state.plots.filter(p => !isActuallyReserved(p.id));
+      if (pref !== 'auto') {
+        const match = candidates.filter(p => p.zone === pref);
+        if (match.length) candidates = match;
+      }
+      return candidates.sort((a, b) => b.scenic - a.scenic)[0] ?? null;
+    }
+
+    /* ─── Map render ────────────────────────────────────────── */
+    function renderMap() {
       const rec = recommendedPlot();
       els.mapGrid.innerHTML = '';
+
       state.plots.forEach(plot => {
+        const reserved = isActuallyReserved(plot.id);
+        const selected = plot.id === state.selectedPlotId;
+        const isRec    = rec && plot.id === rec.id && !reserved && !selected;
+
         const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'plot free';
-        if(isActuallyReserved(plot.id)) btn.className = 'plot reserved';
-        if(plot.id === state.selectedPlotId) btn.classList.add('selected');
-        if(rec && plot.id === rec.id && !isActuallyReserved(plot.id) && plot.id !== state.selectedPlotId) btn.classList.add('recommended');
-        if(state.selectedZoneFilter !== 'all' && plot.zone !== state.selectedZoneFilter){
+        btn.type      = 'button';
+        btn.className = `plot ${reserved ? 'reserved' : 'free'}${selected ? ' selected' : ''}${isRec ? ' recommended' : ''}`;
+        btn.dataset.id   = plot.id;
+        btn.dataset.zone = plot.zone;
+        btn.setAttribute('aria-label', `Plats ${plot.id}, ${zoneName(plot.zone)}, ${reserved ? 'upptagen' : 'ledig'}`);
+        btn.setAttribute('aria-pressed', String(selected));
+        btn.setAttribute('role', 'gridcell');
+
+        if (state.selectedZoneFilter !== 'all' && plot.zone !== state.selectedZoneFilter) {
           btn.style.opacity = '.28';
         }
-        btn.dataset.id = plot.id;
-        btn.dataset.zone = plot.zone;
-        btn.innerHTML = `<small>${plot.id}</small>`;
+        btn.innerHTML = `<small aria-hidden="true">${plot.id}</small>`;
+
         btn.addEventListener('click', () => {
-          if(isActuallyReserved(plot.id)) return showToast('Den platsen är redan upptagen i valt tidspass.');
+          if (reserved) { showToast('Den platsen är redan upptagen i valt tidspass.'); return; }
           state.selectedPlotId = plot.id;
-          updateLivePanels();
-          renderMap();
+          refresh();
         });
+
         els.mapGrid.appendChild(btn);
       });
+
       const freeCount = state.plots.filter(p => !isActuallyReserved(p.id)).length;
       els.availableNow.textContent = freeCount;
     }
 
-    function updateLivePanels(){
-      const plot = state.plots.find(p=>p.id===state.selectedPlotId) || recommendedPlot();
-      const coords = plot ? generateCoords(plot.id) : { text:'Genereras vid bokning' };
-      els.summaryPlot.textContent = plot ? plot.id : 'Ingen vald ännu';
-      els.summaryZone.textContent = plot ? zoneName(plot.zone) : '—';
-      els.summaryCoord.textContent = plot ? coords.text : 'Genereras vid bokning';
+    /* ─── Live panels ───────────────────────────────────────── */
+    function updateLivePanels() {
+      const plot   = state.plots.find(p => p.id === state.selectedPlotId) ?? recommendedPlot();
+      const coords = plot ? generateCoords(plot.id) : { text: 'Genereras vid bokning' };
+
+      els.summaryPlot.textContent    = plot ? plot.id : 'Ingen vald ännu';
+      els.summaryZone.textContent    = plot ? zoneName(plot.zone) : '—';
+      els.summaryCoord.textContent   = plot ? coords.text : 'Genereras vid bokning';
       els.summaryCheckin.textContent = `${slotStart(state.selectedSlot)}–${checkinDeadline(state.selectedSlot)}`;
-      els.coordBox.textContent = coords.text;
+      els.coordBox.textContent       = coords.text;
+
       renderQR(`${plot ? plot.id : 'P--'}|${els.bookingDate.value || 'datum'}|${state.selectedSlot}|${selectedPreference()}`);
     }
 
-    function renderQR(payload){
+    /* ─── QR render ─────────────────────────────────────────── */
+    function renderQR(payload) {
       const size = 21;
-      let html = `<svg viewBox="0 0 ${size} ${size}" width="92" height="92" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="white"/>`;
-      const bits = Array.from(payload).reduce((acc,ch)=> acc + ch.charCodeAt(0).toString(2).padStart(8,'0'), '');
+      const bits = Array.from(payload).reduce((acc, ch) => acc + ch.charCodeAt(0).toString(2).padStart(8,'0'), '');
+      const finder = (x, y) =>
+        `<rect x="${x}" y="${y}" width="7" height="7" fill="black"/>` +
+        `<rect x="${x+1}" y="${y+1}" width="5" height="5" fill="white"/>` +
+        `<rect x="${x+2}" y="${y+2}" width="3" height="3" fill="black"/>`;
+
+      let rects = finder(0,0) + finder(14,0) + finder(0,14);
       let i = 0;
-      const finder = (x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="black"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="white"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="black"/>`;
-      html += finder(0,0) + finder(14,0) + finder(0,14);
-      for(let y=0;y<size;y++){
-        for(let x=0;x<size;x++){
-          const inFinder = (x<7&&y<7)||(x>13&&y<7)||(x<7&&y>13);
-          if(inFinder) continue;
-          const bit = bits[i % bits.length] === '1';
-          const pattern = ((x*y + x + y) % 3 === 0);
-          if(bit ^ pattern) html += `<rect x="${x}" y="${y}" width="1" height="1" fill="black"/>`;
+
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const inFinder = (x < 7 && y < 7) || (x > 13 && y < 7) || (x < 7 && y > 13);
+          if (inFinder) continue;
+          const bit     = bits[i % bits.length] === '1';
+          const pattern = ((x * y + x + y) % 3 === 0);
+          if (bit ^ pattern) rects += `<rect x="${x}" y="${y}" width="1" height="1" fill="black"/>`;
           i++;
         }
       }
-      html += '</svg>';
-      els.qrBox.innerHTML = html;
+
+      els.qrBox.innerHTML =
+        `<svg viewBox="0 0 ${size} ${size}" width="92" height="92" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">` +
+        `<rect width="${size}" height="${size}" fill="white"/>${rects}</svg>`;
     }
 
-    function save(){
+    /* ─── Persistence ───────────────────────────────────────── */
+    function save() {
       const payload = {
         bookings: state.bookings,
         form: {
-          visitorName: els.visitorName.value,
-          phone: els.phone.value,
-          bookingDate: els.bookingDate.value,
-          selectedSlot: state.selectedSlot,
-          selectedPlotId: state.selectedPlotId,
-          zonePref: selectedPreference()
+          visitorName:     els.visitorName.value,
+          phone:           els.phone.value,
+          bookingDate:     els.bookingDate.value,
+          selectedSlot:    state.selectedSlot,
+          selectedPlotId:  state.selectedPlotId,
+          zonePref:        selectedPreference(),
         }
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     }
 
-    function load(){
+    function load() {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      try{
+      if (!raw) return;
+      try {
         const data = JSON.parse(raw);
         state.bookings = Array.isArray(data.bookings) ? data.bookings : [];
-        if(data.form){
-          els.visitorName.value = data.form.visitorName || '';
-          els.phone.value = data.form.phone || '';
-          els.bookingDate.value = data.form.bookingDate || defaultDate();
-          state.selectedSlot = data.form.selectedSlot || state.selectedSlot;
-          state.selectedPlotId = data.form.selectedPlotId || null;
-          const pref = data.form.zonePref || 'water';
-          const radio = document.querySelector(`input[name="zonePref"][value="${pref}"]`);
-          if(radio) radio.checked = true;
+        if (data.form) {
+          els.visitorName.value  = data.form.visitorName  ?? '';
+          els.phone.value        = data.form.phone        ?? '';
+          els.bookingDate.value  = data.form.bookingDate  || defaultDate();
+          state.selectedSlot     = data.form.selectedSlot ?? state.selectedSlot;
+          state.selectedPlotId   = data.form.selectedPlotId ?? null;
+          const radio = document.querySelector(`input[name="zonePref"][value="${data.form.zonePref ?? 'water'}"]`);
+          if (radio) radio.checked = true;
         }
-      }catch(e){
+      } catch (e) {
         console.warn('Kunde inte läsa sparad data', e);
       }
     }
 
-    function defaultDate(){
-      const d = new Date();
-      d.setDate(d.getDate() + 1);
-      return d.toISOString().slice(0,10);
-    }
+    /* ─── Booking actions ───────────────────────────────────── */
+    function makeBooking() {
+      if (!els.visitorName.value.trim()) { showToast('Fyll i namn först.'); return; }
+      if (!els.phone.value.trim())       { showToast('Fyll i mobilnummer först.'); return; }
+      if (!els.bookingDate.value)        { showToast('Välj datum först.'); return; }
 
-    function syncSlotButtons(){
-      document.querySelectorAll('#timeSlots button').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.slot === state.selectedSlot);
-      });
-    }
+      const plot = state.plots.find(p => p.id === state.selectedPlotId) ?? recommendedPlot();
+      if (!plot)                          { showToast('Ingen ledig plats hittades.'); return; }
+      if (isActuallyReserved(plot.id))   { showToast('Vald plats blev upptagen. Välj en annan.'); return; }
 
-    function syncOptionCards(){
-      const pref = selectedPreference();
-      document.querySelectorAll('.opt').forEach(card => {
-        const input = card.querySelector('input');
-        card.classList.toggle('active', input && input.value === pref);
-      });
-    }
-
-    function syncZoneFilterBar(){
-      document.querySelectorAll('[data-zone-filter]').forEach(btn => btn.classList.toggle('active', btn.dataset.zoneFilter === state.selectedZoneFilter));
-    }
-
-    function makeBooking(){
-      if(!els.visitorName.value.trim()) return showToast('Fyll i namn först.');
-      if(!els.phone.value.trim()) return showToast('Fyll i mobilnummer först.');
-      if(!els.bookingDate.value) return showToast('Välj datum först.');
-      const plot = state.plots.find(p=>p.id===state.selectedPlotId) || recommendedPlot();
-      if(!plot) return showToast('Ingen ledig plats hittades.');
-      if(isActuallyReserved(plot.id)) return showToast('Vald plats blev upptagen. Välj en annan.');
       state.selectedPlotId = plot.id;
       const coords = generateCoords(plot.id);
-      const code = `LM-${plot.id}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
+      const code   = `LM-${plot.id}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
+
       const booking = {
-        id: crypto.randomUUID ? crypto.randomUUID() : `b_${Date.now()}`,
-        name: els.visitorName.value.trim(),
-        phone: els.phone.value.trim(),
-        date: els.bookingDate.value,
-        slot: state.selectedSlot,
-        zone: plot.zone,
-        plotId: plot.id,
+        id:        crypto.randomUUID?.() ?? `b_${Date.now()}`,
+        name:      els.visitorName.value.trim(),
+        phone:     els.phone.value.trim(),
+        date:      els.bookingDate.value,
+        slot:      state.selectedSlot,
+        zone:      plot.zone,
+        plotId:    plot.id,
         coords,
         code,
         createdAt: new Date().toISOString(),
         checkedIn: false,
-        status: 'active'
+        status:    'active',
       };
+
       state.bookings.unshift(booking);
-      save();
+      refresh();
       renderBookings();
-      renderMap();
-      updateLivePanels();
+
       els.dialogText.textContent = `${booking.name}, din bokning för ${formatDate(booking.date)} ${booking.slot} är klar.`;
-      els.dialogPlot.textContent = `${booking.plotId} • ${zoneName(booking.zone)}`;
+      els.dialogPlot.textContent = `${booking.plotId} · ${zoneName(booking.zone)}`;
       els.dialogCoord.textContent = booking.coords.text;
-      els.dialogCode.textContent = booking.code;
-      if(typeof els.dialog.showModal === 'function') els.dialog.showModal();
+      els.dialogCode.textContent  = booking.code;
+      if (typeof els.dialog.showModal === 'function') els.dialog.showModal();
       showToast('Bokningen sparades lokalt.');
     }
 
-    function renderBookings(){
-      if(!state.bookings.length){
-        els.bookingsList.innerHTML = '<div class="muted">Inga bokningar ännu. När du bokar sparas de här.</div>';
+    function handleBookingAction(action, id) {
+      const booking = state.bookings.find(b => b.id === id);
+      if (!booking) return;
+
+      if (action === 'checkin') {
+        booking.checkedIn = true;
+        booking.status    = 'active';
+        save();
+        renderBookings();
+        showToast(`Plats ${booking.plotId} incheckad.`);
+      }
+
+      if (action === 'reuse') {
+        els.visitorName.value = booking.name;
+        els.phone.value       = booking.phone;
+        els.bookingDate.value = booking.date;
+        state.selectedSlot    = booking.slot;
+        state.selectedPlotId  = booking.plotId;
+        const radio = document.querySelector(`input[name="zonePref"][value="${booking.zone}"]`)
+                   ?? document.querySelector('input[name="zonePref"][value="auto"]');
+        if (radio) radio.checked = true;
+        syncSlotButtons();
+        syncOptionCards();
+        refresh();
+        location.hash = '#boka';
+        showToast('Val återställda till formuläret.');
+      }
+
+      if (action === 'delete') {
+        state.bookings = state.bookings.filter(b => b.id !== id);
+        save();
+        renderBookings();
+        renderMap();
+        showToast('Bokningen togs bort.');
+      }
+    }
+
+    /* ─── Booking list render ───────────────────────────────── */
+    function renderBookings() {
+      if (!state.bookings.length) {
+        els.bookingsList.innerHTML = `
+          <div class="booking-empty">
+            <div class="empty-icon">🏖️</div>
+            <p>Inga bokningar ännu.</p>
+            <a href="#boka" class="btn btn--primary btn--sm">Boka din första strandplats</a>
+          </div>`;
         return;
       }
+
       els.bookingsList.innerHTML = '';
       state.bookings.forEach(booking => {
+        const statusLevel = booking.status === 'released' ? 'danger' : booking.checkedIn ? 'ok' : 'warn';
+        const statusText  = booking.status === 'released' ? 'Frisläppt' : booking.checkedIn ? 'Incheckad' : 'Väntar på check-in';
+
         const item = document.createElement('article');
         item.className = 'booking-item';
-        const statusClass = booking.status === 'released' ? 'status-danger' : booking.checkedIn ? 'status-ok' : 'status-warn';
-        const statusText = booking.status === 'released' ? 'Frisläppt' : booking.checkedIn ? 'Incheckad' : 'Väntar på check-in';
         item.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap">
+          <div style="display:flex;justify-content:space-between;gap:var(--s2);align-items:flex-start;flex-wrap:wrap;margin-bottom:var(--s1)">
             <div>
-              <h4>${booking.plotId} • ${zoneName(booking.zone)}</h4>
-              <div class="muted">${booking.name} • ${booking.phone}</div>
+              <h4>${booking.plotId} · ${zoneName(booking.zone)}</h4>
+              <div class="muted" style="font-size:.88rem">${booking.name} · ${booking.phone}</div>
             </div>
-            <span class="${statusClass}">${statusText}</span>
+            <span class="status status--${statusLevel}">${statusText}</span>
           </div>
           <div class="booking-meta">
             <div><strong>Datum</strong><br>${formatDate(booking.date)}</div>
@@ -741,137 +1229,105 @@
             <div><strong>Kod</strong><br>${booking.code}</div>
           </div>
           <div class="booking-actions">
-            <button class="btn btn-primary small-btn" data-action="checkin" data-id="${booking.id}">Checka in</button>
-            <button class="btn btn-secondary small-btn" data-action="reuse" data-id="${booking.id}">Återanvänd val</button>
-            <button class="btn btn-secondary small-btn" data-action="delete" data-id="${booking.id}">Ta bort</button>
-          </div>
-        `;
+            <button class="btn btn--primary btn--sm"    data-action="checkin" data-id="${booking.id}">Checka in</button>
+            <button class="btn btn--secondary btn--sm"  data-action="reuse"   data-id="${booking.id}">Återanvänd val</button>
+            <button class="btn btn--secondary btn--sm"  data-action="delete"  data-id="${booking.id}">Ta bort</button>
+          </div>`;
         els.bookingsList.appendChild(item);
       });
+
       els.bookingsList.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', () => handleBookingAction(btn.dataset.action, btn.dataset.id));
       });
     }
 
-    function handleBookingAction(action, id){
-      const booking = state.bookings.find(b=>b.id===id);
-      if(!booking) return;
-      if(action === 'checkin'){
-        booking.checkedIn = true;
-        booking.status = 'active';
-        save();
-        renderBookings();
-        showToast(`Plats ${booking.plotId} incheckad.`);
-      }
-      if(action === 'reuse'){
-        els.visitorName.value = booking.name;
-        els.phone.value = booking.phone;
-        els.bookingDate.value = booking.date;
-        state.selectedSlot = booking.slot;
-        state.selectedPlotId = booking.plotId;
-        const radio = document.querySelector(`input[name="zonePref"][value="${booking.zone}"]`) || document.querySelector('input[name="zonePref"][value="auto"]');
-        if(radio) radio.checked = true;
-        syncSlotButtons();
-        syncOptionCards();
-        renderMap();
-        updateLivePanels();
-        save();
-        location.hash = '#boka';
-        showToast('Val återställda till formuläret.');
-      }
-      if(action === 'delete'){
-        state.bookings = state.bookings.filter(b=>b.id!==id);
-        save();
-        renderBookings();
-        renderMap();
-        showToast('Bokningen togs bort.');
-      }
-    }
-
-    function exportJson(){
-      const blob = new Blob([JSON.stringify(state.bookings, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'strandsmart-lomma-bookings.json';
+    /* ─── Export / Clear ────────────────────────────────────── */
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(state.bookings, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = Object.assign(document.createElement('a'), { href: url, download: 'strandsmart-lomma-bookings.json' });
       a.click();
       URL.revokeObjectURL(url);
     }
 
-    function clearAll(){
-      if(!confirm('Detta tar bort alla lokalt sparade bokningar och formulärval i denna webbläsare.')) return;
+    function clearAll() {
+      if (!confirm('Detta tar bort alla lokalt sparade bokningar och formulärval i denna webbläsare.')) return;
       localStorage.removeItem(STORAGE_KEY);
-      state.bookings = [];
+      state.bookings       = [];
       state.selectedPlotId = null;
       els.visitorName.value = '';
-      els.phone.value = '';
+      els.phone.value       = '';
       els.bookingDate.value = defaultDate();
       document.querySelector('input[name="zonePref"][value="water"]').checked = true;
-      state.selectedSlot = '10:00–13:00';
+      state.selectedSlot    = '10:00–13:00';
       syncSlotButtons();
       syncOptionCards();
-      renderMap();
+      refresh();
       renderBookings();
-      updateLivePanels();
       showToast('All lokal data är rensad.');
     }
 
-    function initNavigation(){
-      document.querySelectorAll('.bottom-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-          document.querySelectorAll('.bottom-nav a').forEach(l=>l.classList.remove('active'));
-          link.classList.add('active');
-        });
-      });
-      els.scrollBookingsBtn.addEventListener('click', ()=>document.getElementById('mina-bokningar').scrollIntoView({behavior:'smooth'}));
-      els.scrollBookBtn2?.addEventListener('click', ()=>document.getElementById('boka').scrollIntoView({behavior:'smooth'}));
-    }
-
-    function attachEvents(){
-      document.querySelectorAll('#timeSlots button').forEach(btn => {
-        btn.addEventListener('click', ()=>{
+    /* ─── Event listeners ───────────────────────────────────── */
+    function attachEvents() {
+      document.querySelectorAll('#timeSlots .btn').forEach(btn => {
+        btn.addEventListener('click', () => {
           state.selectedSlot = btn.dataset.slot;
           syncSlotButtons();
-          updateLivePanels();
-          renderMap();
-          save();
+          refresh();
         });
       });
+
       document.querySelectorAll('input[name="zonePref"]').forEach(input => {
-        input.addEventListener('change', ()=>{
+        input.addEventListener('change', () => {
           syncOptionCards();
-          if(!state.selectedPlotId || isActuallyReserved(state.selectedPlotId)){
-            const rec = recommendedPlot();
-            state.selectedPlotId = rec ? rec.id : null;
+          if (!state.selectedPlotId || isActuallyReserved(state.selectedPlotId)) {
+            state.selectedPlotId = recommendedPlot()?.id ?? null;
           }
-          renderMap();
-          updateLivePanels();
-          save();
+          refresh();
         });
       });
+
       document.querySelectorAll('[data-zone-filter]').forEach(btn => {
-        btn.addEventListener('click', ()=>{
+        btn.addEventListener('click', () => {
           state.selectedZoneFilter = btn.dataset.zoneFilter;
           syncZoneFilterBar();
           renderMap();
         });
       });
+
       [els.visitorName, els.phone, els.bookingDate].forEach(input => input.addEventListener('input', save));
+
       els.bookBtn.addEventListener('click', makeBooking);
-      els.recommendBtn.addEventListener('click', ()=>{
+
+      els.recommendBtn.addEventListener('click', () => {
         const rec = recommendedPlot();
-        state.selectedPlotId = rec ? rec.id : null;
-        renderMap();
-        updateLivePanels();
-        save();
+        state.selectedPlotId = rec?.id ?? null;
+        refresh();
         showToast(rec ? `Rekommenderad plats: ${rec.id}` : 'Ingen plats kunde rekommenderas.');
       });
+
       els.exportBtn.addEventListener('click', exportJson);
       els.clearBtn.addEventListener('click', clearAll);
-      els.closeDialogBtn.addEventListener('click', ()=>els.dialog.close());
+      els.closeDialogBtn.addEventListener('click', () => els.dialog.close());
+
+      els.scrollBookingsBtn?.addEventListener('click', () =>
+        $('mina-bokningar').scrollIntoView({ behavior: 'smooth' })
+      );
+      els.scrollBookBtn2?.addEventListener('click', () =>
+        $('boka').scrollIntoView({ behavior: 'smooth' })
+      );
+
+      /* Bottom nav active state */
+      document.querySelectorAll('.bottom-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          document.querySelectorAll('.bottom-nav a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
     }
 
-    function init(){
+    /* ─── Init ──────────────────────────────────────────────── */
+    function init() {
       els.bookingDate.value = defaultDate();
       buildPlots();
       generateMetrics();
@@ -879,17 +1335,11 @@
       syncSlotButtons();
       syncOptionCards();
       syncZoneFilterBar();
-      if(!els.bookingDate.value) els.bookingDate.value = defaultDate();
-      if(!state.selectedPlotId){
-        const rec = recommendedPlot();
-        state.selectedPlotId = rec ? rec.id : null;
-      }
-      renderMap();
-      updateLivePanels();
+      if (!els.bookingDate.value) els.bookingDate.value = defaultDate();
+      if (!state.selectedPlotId) state.selectedPlotId = recommendedPlot()?.id ?? null;
+      refresh();
       renderBookings();
       attachEvents();
-      initNavigation();
-      save();
     }
 
     init();
